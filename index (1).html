@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RealToken Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f5f7fa;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a2e;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-blue: #0ea5e9;
+            --accent-green: #22c55e;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Properties Grid */
+        .properties-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Property Card */
+        .property-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .property-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        /* Card Header with Address */
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .location-icon {
+            color: var(--accent-blue);
+            font-size: 20px;
+        }
+
+        .address {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .coordinates {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Card Body */
+        .card-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        @media (max-width: 900px) {
+            .card-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 900px) {
+            .stats-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+            }
+        }
+
+        /* Main Investment Stat */
+        .main-stat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .main-stat .icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-blue);
+            font-size: 18px;
+        }
+
+        .main-stat .content .value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .main-stat .content .label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Property Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--bg-main);
+            border-radius: 10px;
+        }
+
+        .detail-item .icon {
+            font-size: 16px;
+            color: var(--accent-blue);
+            width: 24px;
+            text-align: center;
+        }
+
+        .detail-item .info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-item .info .value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .detail-item .info .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Financial Stats Row */
+        .financial-row {
+            display: flex;
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .financial-item {
+            flex: 1;
+        }
+
+        .financial-item .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .financial-item .value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .financial-item .value.green {
+            color: var(--accent-green);
+        }
+
+        /* Yield Badge */
+        .yield-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .yield-badge .icon {
+            color: var(--accent-green);
+        }
+
+        .yield-badge .text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .yield-badge .label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* More Details Dropdown */
+        .more-details-section {
+            border-top: 1px solid var(--border-light);
+        }
+
+        .more-details-toggle {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--bg-main);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: background 0.2s ease;
+        }
+
+        .more-details-toggle:hover {
+            background: #e9ecf1;
+        }
+
+        .more-details-toggle .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .more-details-toggle.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .more-details-content {
+            display: none;
+            padding: 20px 24px;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .more-details-content.show {
+            display: block;
+        }
+
+        .details-category {
+            margin-bottom: 20px;
+        }
+
+        .details-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .details-category-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .details-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .details-list-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 12px;
+            background: var(--bg-main);
+            border-radius: 8px;
+        }
+
+        .details-list-item .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .details-list-item .value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .details-list-item .value a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .details-list-item .value a:hover {
+            text-decoration: underline;
+        }
+
+        /* Image Gallery Section */
+        .gallery-section {
+            position: relative;
+            height: 400px;
+            background: #1a1a2e;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Carousel Navigation */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: #fff;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .carousel-btn.prev {
+            left: 16px;
+        }
+
+        .carousel-btn.next {
+            right: 16px;
+        }
+
+        /* Carousel Dots */
+        .carousel-dots {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .carousel-dot.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        /* Image Counter */
+        .image-counter {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        /* Launch Date Badge */
+        .launch-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .launch-badge .icon {
+            color: #fbbf24;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 16px;
+            }
+
+            .gallery-section {
+                height: 280px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .financial-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .details-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📍 PredicT Properties</h1>
+            <p>List of properties for the prediction experiment, only one will be evaluated by an expert</p>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid">
+            <!-- Properties will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const properties = [
+            {
+                fullName: "23750 W 7 Mile Rd, Detroit, MI 48219",
+                lat: 42.429298,
+                lng: -83.274959,
+                totalInvestment: 944537,
+                sqFt: 11944,
+                propertyType: "Multi Family",
+                grossRentYear: 159360,
+                netRentYear: 85986,
+                launchDate: "2024-12-20",
+                yield: 9.10,
+                bedBath: "17x1 Bed / 17x1 Bath",
+                totalUnits: 17,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-w-7-mile-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-4.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-stairs-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-hall-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-hall-4.jpg"
+                ],
+                // Additional details from CSV
+                shortName: "23750 W 7 Mile",
+                symbol: "REALTOKEN-S-23750-W-7-MILE-RD-DETROIT-MI",
+                tokenPrice: 50.51,
+                totalTokens: 18700,
+                currency: "USD",
+                propertyManagement: 1062.4,
+                propertyManagementPercent: 8,
+                realtPlatform: 265.6,
+                realtPlatformPercent: 2,
+                insurance: 1360,
+                propertyTaxes: 775,
+                utilities: 1651.5,
+                initialMaintenanceReserve: 36560,
+                netRentMonth: 7165.5,
+                netRentDay: 235.58,
+                marketplaceLink: "https://realt.co/product/23750-w-7-mile-rd-detroit-mi-48219/",
+                lotSize: 13068,
+                hasTenants: true,
+                rentedUnits: 17,
+                underlyingAssetPrice: 780000,
+                renovationReserve: 32000,
+                propertyMaintenanceMonthly: 1000,
+                rentStartDate: "2025-02-15",
+                seriesNumber: 686,
+                constructionYear: 1955,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Seven Mile - Rouge",
+                rentalType: "long_term",
+                miscellaneousCosts: 600
+            },
+            {
+                fullName: "18881 Mound Rd, Detroit, MI 48234",
+                lat: 42.432798,
+                lng: -83.044147,
+                totalInvestment: 336340,
+                sqFt: 3732,
+                propertyType: "Multi Family",
+                grossRentYear: 66600,
+                netRentYear: 30660,
+                launchDate: "2024-12-13",
+                yield: 9.12,
+                bedBath: "8x1 Bed / 8x1 Bath",
+                totalUnits: 8,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-3.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-door-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-back-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-back-side-1.jpg"
+                ],
+                shortName: "18881 Mound",
+                symbol: "REALTOKEN-S-18881-MOUND-RD-DETROIT-MI",
+                tokenPrice: 50.2,
+                totalTokens: 6700,
+                currency: "USD",
+                propertyManagement: 444,
+                propertyManagementPercent: 8,
+                realtPlatform: 111,
+                realtPlatformPercent: 2,
+                insurance: 640,
+                propertyTaxes: 400,
+                utilities: 600,
+                initialMaintenanceReserve: 11100,
+                netRentMonth: 2555,
+                netRentDay: 84,
+                marketplaceLink: "https://realt.co/product/18881-mound-rd-detroit-mi-48234/",
+                lotSize: null,
+                hasTenants: true,
+                rentedUnits: 8,
+                underlyingAssetPrice: 270000,
+                renovationReserve: 20000,
+                propertyMaintenanceMonthly: 800,
+                rentStartDate: "2025-03-15",
+                seriesNumber: 688,
+                constructionYear: 1959,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Krainz Woods",
+                rentalType: "long_term",
+                miscellaneousCosts: 600
+            },
+            {
+                fullName: "14631-14633 Plymouth Rd, Detroit, MI 48227",
+                lat: 42.372607,
+                lng: -83.188424,
+                totalInvestment: 1389025,
+                sqFt: 15292,
+                propertyType: "Multi Family",
+                grossRentYear: 249600,
+                netRentYear: 126840,
+                launchDate: "2024-12-13",
+                yield: 9.13,
+                bedBath: "27x1 Bed / 27x1 Bath",
+                totalUnits: 27,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-side-3.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-door-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-back-side-4.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-back-side-3.jpg"
+                ],
+                shortName: "14631-14633 Plymouth",
+                symbol: "REALTOKEN-S-14631-14633-PLYMOUTH-RD-DETROIT-MI",
+                tokenPrice: 50.51,
+                totalTokens: 27500,
+                currency: "USD",
+                propertyManagement: 1664,
+                propertyManagementPercent: 8,
+                realtPlatform: 416,
+                realtPlatformPercent: 2,
+                insurance: 1900,
+                propertyTaxes: 1300,
+                utilities: 2800,
+                initialMaintenanceReserve: 41600,
+                netRentMonth: 10570,
+                netRentDay: 347.51,
+                marketplaceLink: "https://realt.co/product/14631-14633-plymouth-rd-detroit-mi-48227/",
+                lotSize: null,
+                hasTenants: true,
+                rentedUnits: 27,
+                underlyingAssetPrice: 1150000,
+                renovationReserve: 57000,
+                propertyMaintenanceMonthly: 2150,
+                rentStartDate: "2025-03-15",
+                seriesNumber: 687,
+                constructionYear: 1952,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Plymouth - Hubbell",
+                rentalType: "long_term",
+                miscellaneousCosts: 600
+            },
+            {
+                fullName: "11373 Prest St, Detroit, MI 48227",
+                lat: 42.371296,
+                lng: -83.196702,
+                totalInvestment: 76806,
+                sqFt: 864,
+                propertyType: "Single Family",
+                grossRentYear: 12120,
+                netRentYear: 6948,
+                launchDate: "2024-12-06",
+                yield: 9.05,
+                bedBath: "3 Beds / 1 Bath",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-3.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-door-1-.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-kitchen-1.jpg"
+                ],
+                shortName: "11373 Prest",
+                symbol: "REALTOKEN-S-11373-PREST-ST-DETROIT-MI",
+                tokenPrice: 50.2,
+                totalTokens: 1530,
+                currency: "USD",
+                propertyManagement: 80.8,
+                propertyManagementPercent: 8,
+                realtPlatform: 20.2,
+                realtPlatformPercent: 2,
+                insurance: 90,
+                propertyTaxes: 120,
+                utilities: 0,
+                initialMaintenanceReserve: 2020,
+                netRentMonth: 579,
+                netRentDay: 19.04,
+                marketplaceLink: "https://realt.co/product/11373-prest-st-detroit-mi-48227/",
+                lotSize: 3702,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 63000,
+                renovationReserve: 3000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2025-03-01",
+                seriesNumber: 684,
+                constructionYear: 1949,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Plymuth - Hubbell",
+                rentalType: "long_term",
+                miscellaneousCosts: 500
+            },
+            {
+                fullName: "16728-16730 Woodingham Dr, Detroit, MI 48221",
+                lat: 42.415419,
+                lng: -83.149859,
+                totalInvestment: 143896.5,
+                sqFt: 1868,
+                propertyType: "Duplex",
+                grossRentYear: 22200,
+                netRentYear: 14460,
+                launchDate: "2023-12-09",
+                yield: 10.05,
+                bedBath: "2x2 Beds / 2x1 Bath",
+                totalUnits: 2,
+                images: [
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-front-hero-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-side-2-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-side-1-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-back-1-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-outside-1-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-outside-2-fix.jpg"
+                ],
+                shortName: "16728-16730 Woodingham",
+                symbol: "REALTOKEN-S-16728-16730-WOODINGHAM-DR-DETROIT-MI",
+                tokenPrice: 50.49,
+                totalTokens: 2850,
+                currency: "USD",
+                propertyManagement: 148,
+                propertyManagementPercent: 8,
+                realtPlatform: 37,
+                realtPlatformPercent: 2,
+                insurance: 130,
+                propertyTaxes: 150,
+                utilities: 0,
+                initialMaintenanceReserve: 3700,
+                netRentMonth: 1205,
+                netRentDay: 39.62,
+                marketplaceLink: "https://realt.co/product/16728-16730-woodingham-dr-detroit-mi-48221/",
+                lotSize: 3398,
+                hasTenants: true,
+                rentedUnits: 2,
+                underlyingAssetPrice: 98000,
+                renovationReserve: 25000,
+                propertyMaintenanceMonthly: 180,
+                rentStartDate: "2024-02-01",
+                seriesNumber: 432,
+                constructionYear: 1928,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Forced Air w/o Ducts",
+                cooling: "",
+                neighborhood: "Maygrove",
+                rentalType: "long_term",
+                miscellaneousCosts: 300
+            },
+            {
+                fullName: "9518 Franklin Dr, Mont Belvieu, TX 77523",
+                lat: 29.832396,
+                lng: -94.853589,
+                totalInvestment: 461643,
+                sqFt: 3358,
+                propertyType: "Single Family",
+                grossRentYear: 47760,
+                netRentYear: 31572,
+                launchDate: "2024-10-18",
+                yield: 6.84,
+                bedBath: "4 Beds / 3.5 Baths",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-aereal-garage-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-garden-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-back-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-back-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-pool-4.jpg"
+                ],
+                shortName: "9518 Franklin",
+                symbol: "REALTOKEN-S-9518-FRANKLIN-DR-MONT-BELVIEU-TX",
+                tokenPrice: 50.73,
+                totalTokens: 9100,
+                currency: "USD",
+                propertyManagement: 318.4,
+                propertyManagementPercent: 8,
+                realtPlatform: 79.6,
+                realtPlatformPercent: 2,
+                insurance: 110,
+                propertyTaxes: 721,
+                utilities: 0,
+                initialMaintenanceReserve: 7960,
+                netRentMonth: 2631,
+                netRentDay: 86.5,
+                marketplaceLink: "https://realt.co/product/9518-franklin-dr-mont-belvieu-tx-77523/",
+                lotSize: 11761,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 401000,
+                renovationReserve: 5000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2025-01-15",
+                seriesNumber: 629,
+                constructionYear: 2017,
+                constructionType: "Brick, Vinyl Siding",
+                roofType: "Composition",
+                foundation: "Slab",
+                heating: "Central Air, Electric, Gas",
+                cooling: "Central",
+                neighborhood: "Mont Belvieu",
+                rentalType: "long_term",
+                miscellaneousCosts: 500
+            },
+            {
+                fullName: "8034 Faith Ln, Montgomery, AL 36117",
+                lat: 32.352942,
+                lng: -86.135603,
+                totalInvestment: 327296,
+                sqFt: 1923,
+                propertyType: "Single Family",
+                grossRentYear: 30600,
+                netRentYear: 23856,
+                launchDate: "2023-08-25",
+                yield: 7.29,
+                bedBath: "3 Beds / 2 Baths",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-front-hero.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-garden-1.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-garden-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-front-door.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-kitchen.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-livingroom.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-room-1.jpg"
+                ],
+                shortName: "8034 Faith",
+                symbol: "REALTOKEN-S-8034-FAITH-LN-MONTGOMERY-AL",
+                tokenPrice: 51.14,
+                totalTokens: 6400,
+                currency: "USD",
+                propertyManagement: 204,
+                propertyManagementPercent: 8,
+                realtPlatform: 51,
+                realtPlatformPercent: 2,
+                insurance: 67,
+                propertyTaxes: 120,
+                utilities: 0,
+                initialMaintenanceReserve: 5100,
+                netRentMonth: 1988,
+                netRentDay: 65.36,
+                marketplaceLink: "https://realt.co/product/8034-faith-ln-montgomery-al-36117/",
+                lotSize: 7175,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 287500,
+                renovationReserve: 3000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2023-10-01",
+                seriesNumber: 364,
+                constructionYear: 2017,
+                constructionType: "Brick / Vinyl Siding",
+                roofType: "Composition Shingles",
+                foundation: "Slab",
+                heating: "Heat Pump / Gas",
+                cooling: "Heat Pump",
+                neighborhood: "Ryan Ridge",
+                rentalType: "long_term",
+                miscellaneousCosts: 4000
+            },
+            {
+                fullName: "1769 Cheryl Ave, Griffin, GA 30224",
+                lat: 33.224176,
+                lng: -84.310708,
+                totalInvestment: 307272,
+                sqFt: 1680,
+                propertyType: "Single Family",
+                grossRentYear: 31200,
+                netRentYear: 22068,
+                launchDate: "2023-09-21",
+                yield: 7.18,
+                bedBath: "3 Beds / 3 Baths",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-front-hero.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-back-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-kitchen-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-livingroom-1.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-room-1.jpg"
+                ],
+                shortName: "1769 Cheryl",
+                symbol: "REALTOKEN-S-1769-CHERYL-AVE-GRIFFIN-GA",
+                tokenPrice: 49.56,
+                totalTokens: 6200,
+                currency: "USD",
+                propertyManagement: 208,
+                propertyManagementPercent: 8,
+                realtPlatform: 52,
+                realtPlatformPercent: 2,
+                insurance: 60,
+                propertyTaxes: 321,
+                utilities: 0,
+                initialMaintenanceReserve: 5200,
+                netRentMonth: 1839,
+                netRentDay: 60.46,
+                marketplaceLink: "https://realt.co/product/1769-cheryl-ave-griffin-ga-30224/",
+                lotSize: 11761,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 250000,
+                renovationReserve: 3000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2023-12-01",
+                seriesNumber: 387,
+                constructionYear: 2021,
+                constructionType: "Concrete",
+                roofType: "Composition Shingles",
+                foundation: "Poured Concrete",
+                heating: "Central Air",
+                cooling: "Central Air",
+                neighborhood: "Powers Court",
+                rentalType: "long_term",
+                miscellaneousCosts: 23000
+            },
+            {
+                fullName: "9311 Bedford St, Detroit, MI 48224",
+                lat: 42.411886,
+                lng: -82.948675,
+                totalInvestment: 90270,
+                sqFt: 1170,
+                propertyType: "Single Family",
+                grossRentYear: 14400,
+                netRentYear: 8220,
+                launchDate: "2024-06-14",
+                yield: 9.11,
+                bedBath: "3 Beds / 1 Bath",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/06/9311-Bedford-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/06/9311-Bedford-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/06/9311-Bedford-side-1.jpg"
+                ],
+                shortName: "9311 Bedford",
+                symbol: "REALTOKEN-S-9311-BEDFORD-ST-DETROIT-MI",
+                tokenPrice: 50.15,
+                totalTokens: 1800,
+                currency: "USD",
+                propertyManagement: 96,
+                propertyManagementPercent: 8,
+                realtPlatform: 24,
+                realtPlatformPercent: 2,
+                insurance: 85,
+                propertyTaxes: 190,
+                utilities: 0,
+                initialMaintenanceReserve: 2400,
+                netRentMonth: 685,
+                netRentDay: 22.52,
+                marketplaceLink: "https://realt.co/product/9311-bedford-st-detroit-mi-48224/",
+                lotSize: 3920,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 66000,
+                renovationReserve: 10000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2024-08-15",
+                seriesNumber: 565,
+                constructionYear: 1936,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Block",
+                heating: "Gas / Forced Air not Ducted",
+                cooling: "",
+                neighborhood: "Yorkshire Woods",
+                rentalType: "long_term",
+                miscellaneousCosts: 350
+            }
+        ];
+
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        };
+
+        const formatCurrencyDecimals = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value);
+        };
+
+        const formatDate = (dateStr) => {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        };
+
+        const formatNumber = (value) => {
+            if (value === null || value === undefined || value === '') return 'N/A';
+            return new Intl.NumberFormat('en-US').format(value);
+        };
+
+        const grid = document.getElementById('propertiesGrid');
+
+        properties.forEach((prop, index) => {
+            const card = document.createElement('div');
+            card.className = 'property-card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="location-icon">📍</span>
+                    <span class="address">${prop.fullName}</span>
+                    <span class="coordinates">(${prop.lat}, ${prop.lng})</span>
+                </div>
+                <div class="card-body">
+                    <div class="stats-section">
+                        <div class="main-stat">
+                            <div class="icon">$</div>
+                            <div class="content">
+                                <div class="value">${formatCurrency(prop.totalInvestment)}</div>
+                                <div class="label">Total investment</div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="icon">🏠</span>
+                                <div class="info">
+                                    <span class="value">${prop.sqFt.toLocaleString()} sq ft</span>
+                                    <span class="label">Size</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="icon">🏢</span>
+                                <div class="info">
+                                    <span class="value">${prop.propertyType}</span>
+                                    <span class="label">Type</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="icon">🛏️</span>
+                                <div class="info">
+                                    <span class="value">${prop.bedBath}</span>
+                                    <span class="label">Beds / Baths</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="icon">🔑</span>
+                                <div class="info">
+                                    <span class="value">${prop.totalUnits}</span>
+                                    <span class="label">Units</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="financial-row">
+                            <div class="financial-item">
+                                <div class="label">Gross Rent Year</div>
+                                <div class="value">${formatCurrency(prop.grossRentYear)}</div>
+                            </div>
+                            <div class="financial-item">
+                                <div class="label">Net Rent Year</div>
+                                <div class="value">${formatCurrency(prop.netRentYear)}</div>
+                            </div>
+                        </div>
+
+                        <div class="yield-badge">
+                            <span class="icon">📈</span>
+                            <span class="text">${prop.yield.toFixed(2)}%</span>
+                            <span class="label">Annual Percentage Yield</span>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-section">
+                        <div class="launch-badge">
+                            <span class="icon">📅</span>
+                            <span>${formatDate(prop.launchDate)}</span>
+                            <span style="opacity: 0.7;">Initial Launch Date</span>
+                        </div>
+                        <div class="carousel" data-index="${index}">
+                            <div class="carousel-track" id="track-${index}">
+                                ${prop.images.map((img, i) => `
+                                    <div class="carousel-slide">
+                                        <img src="${img}" alt="Property image ${i + 1}" loading="lazy">
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="carousel-btn prev" onclick="moveCarousel(${index}, -1)">‹</button>
+                            <button class="carousel-btn next" onclick="moveCarousel(${index}, 1)">›</button>
+                            <div class="carousel-dots" id="dots-${index}">
+                                ${prop.images.slice(0, 7).map((_, i) => `
+                                    <div class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${index}, ${i})"></div>
+                                `).join('')}
+                            </div>
+                            <div class="image-counter" id="counter-${index}">1 / ${prop.images.length}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- More Details Dropdown -->
+                <div class="more-details-section">
+                    <button class="more-details-toggle" onclick="toggleDetails(${index})">
+                        <span>📋 More Details</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                    <div class="more-details-content" id="details-${index}">
+                        <div class="details-category">
+                            <div class="details-category-title">🪙 Token Information</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Token Price</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.tokenPrice)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Total Tokens</span>
+                                    <span class="value">${formatNumber(prop.totalTokens)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Symbol</span>
+                                    <span class="value" style="font-size: 11px; word-break: break-all;">${prop.symbol}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Series Number</span>
+                                    <span class="value">#${prop.seriesNumber}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Marketplace</span>
+                                    <span class="value"><a href="${prop.marketplaceLink}" target="_blank">View on RealT</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-category">
+                            <div class="details-category-title">💰 Financial Details</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Underlying Asset Price</span>
+                                    <span class="value">${formatCurrency(prop.underlyingAssetPrice)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Net Rent / Month</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.netRentMonth)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Net Rent / Day</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.netRentDay)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Property Management</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.propertyManagement)}/mo (${prop.propertyManagementPercent}%)</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">RealT Platform Fee</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.realtPlatform)}/mo (${prop.realtPlatformPercent}%)</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Insurance</span>
+                                    <span class="value">${formatCurrency(prop.insurance)}/yr</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Property Taxes</span>
+                                    <span class="value">${formatCurrency(prop.propertyTaxes)}/yr</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Utilities</span>
+                                    <span class="value">${prop.utilities > 0 ? formatCurrency(prop.utilities) + '/yr' : 'Tenant Paid'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Initial Maintenance Reserve</span>
+                                    <span class="value">${formatCurrency(prop.initialMaintenanceReserve)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Renovation Reserve</span>
+                                    <span class="value">${formatCurrency(prop.renovationReserve)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Monthly Maintenance</span>
+                                    <span class="value">${formatCurrency(prop.propertyMaintenanceMonthly)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Miscellaneous Costs</span>
+                                    <span class="value">${formatCurrency(prop.miscellaneousCosts)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-category">
+                            <div class="details-category-title">🏗️ Property Details</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Lot Size</span>
+                                    <span class="value">${prop.lotSize ? formatNumber(prop.lotSize) + ' sq ft' : 'N/A'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Construction Year</span>
+                                    <span class="value">${prop.constructionYear}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Construction Type</span>
+                                    <span class="value">${prop.constructionType}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Roof Type</span>
+                                    <span class="value">${prop.roofType}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Foundation</span>
+                                    <span class="value">${prop.foundation}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Heating</span>
+                                    <span class="value">${prop.heating || 'N/A'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Cooling</span>
+                                    <span class="value">${prop.cooling || 'N/A'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Neighborhood</span>
+                                    <span class="value">${prop.neighborhood}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-category">
+                            <div class="details-category-title">👥 Rental Information</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Has Tenants</span>
+                                    <span class="value">${prop.hasTenants ? 'Yes' : 'No'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Rented Units</span>
+                                    <span class="value">${prop.rentedUnits} / ${prop.totalUnits}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Rent Start Date</span>
+                                    <span class="value">${formatDate(prop.rentStartDate)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Rental Type</span>
+                                    <span class="value">${prop.rentalType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Carousel state
+        const carouselStates = properties.map(() => ({ current: 0 }));
+
+        function moveCarousel(index, direction) {
+            const prop = properties[index];
+            const state = carouselStates[index];
+            const maxIndex = prop.images.length - 1;
+            
+            state.current += direction;
+            if (state.current < 0) state.current = maxIndex;
+            if (state.current > maxIndex) state.current = 0;
+            
+            updateCarousel(index);
+        }
+
+        function goToSlide(index, slideIndex) {
+            carouselStates[index].current = slideIndex;
+            updateCarousel(index);
+        }
+
+        function updateCarousel(index) {
+            const state = carouselStates[index];
+            const track = document.getElementById(`track-${index}`);
+            const counter = document.getElementById(`counter-${index}`);
+            const dotsContainer = document.getElementById(`dots-${index}`);
+            
+            track.style.transform = `translateX(-${state.current * 100}%)`;
+            counter.textContent = `${state.current + 1} / ${properties[index].images.length}`;
+            
+            // Update dots
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === state.current);
+            });
+        }
+
+        function toggleDetails(index) {
+            const content = document.getElementById(`details-${index}`);
+            const toggle = content.previousElementSibling;
+            
+            content.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
