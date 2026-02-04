@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RealToken Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f5f7fa;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a2e;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-blue: #0ea5e9;
+            --accent-green: #22c55e;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Properties Grid */
+        .properties-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Property Card */
+        .property-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .property-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        /* Card Header with Address */
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .location-icon {
+            color: var(--accent-blue);
+            font-size: 20px;
+        }
+
+        .address {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .coordinates {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Card Body */
+        .card-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        @media (max-width: 900px) {
+            .card-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 900px) {
+            .stats-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+            }
+        }
+
+        /* Main Investment Stat */
+        .main-stat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .main-stat .icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-blue);
+            font-size: 18px;
+        }
+
+        .main-stat .content .value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .main-stat .content .label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Property Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--bg-main);
+            border-radius: 10px;
+        }
+
+        .detail-item .icon {
+            font-size: 16px;
+            color: var(--accent-blue);
+            width: 24px;
+            text-align: center;
+        }
+
+        .detail-item .info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-item .info .value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .detail-item .info .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Financial Stats Row */
+        .financial-row {
+            display: flex;
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .financial-item {
+            flex: 1;
+        }
+
+        .financial-item .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .financial-item .value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .financial-item .value.green {
+            color: var(--accent-green);
+        }
+
+        /* Yield Badge */
+        .yield-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .yield-badge .icon {
+            color: var(--accent-green);
+        }
+
+        .yield-badge .text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .yield-badge .label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* More Details Dropdown */
+        .more-details-section {
+            border-top: 1px solid var(--border-light);
+        }
+
+        .more-details-toggle {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--bg-main);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: background 0.2s ease;
+        }
+
+        .more-details-toggle:hover {
+            background: #e9ecf1;
+        }
+
+        .more-details-toggle .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .more-details-toggle.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .more-details-content {
+            display: none;
+            padding: 20px 24px;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .more-details-content.show {
+            display: block;
+        }
+
+        .details-category {
+            margin-bottom: 20px;
+        }
+
+        .details-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .details-category-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .details-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .details-list-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 12px;
+            background: var(--bg-main);
+            border-radius: 8px;
+        }
+
+        .details-list-item .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .details-list-item .value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .details-list-item .value a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .details-list-item .value a:hover {
+            text-decoration: underline;
+        }
+
+        /* Image Gallery Section */
+        .gallery-section {
+            position: relative;
+            height: 400px;
+            background: #1a1a2e;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Carousel Navigation */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: #fff;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .carousel-btn.prev {
+            left: 16px;
+        }
+
+        .carousel-btn.next {
+            right: 16px;
+        }
+
+        /* Carousel Dots */
+        .carousel-dots {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .carousel-dot.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        /* Image Counter */
+        .image-counter {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        /* Launch Date Badge */
+        .launch-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .launch-badge .icon {
+            color: #fbbf24;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 16px;
+            }
+
+            .gallery-section {
+                height: 280px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .financial-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .details-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Misc Data Toggle - slightly different styling */
+        .misc-details-toggle {
+            width: 100%;
+            padding: 14px 24px;
+            background: #f0f4f8;
+            border: none;
+            border-top: 1px solid var(--border-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: background 0.2s ease;
+        }
+
+        .misc-details-toggle:hover {
+            background: #e4e9ef;
+        }
+
+        .misc-details-toggle .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .misc-details-toggle.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .misc-details-content {
+            display: none;
+            padding: 20px 24px;
+            background: #fafbfc;
+            border-top: 1px solid var(--border-light);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .misc-details-content.show {
+            display: block;
+        }
+
+        .misc-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px;
+        }
+
+        .misc-list-item {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 10px;
+            background: var(--bg-white);
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+        }
+
+        .misc-list-item .label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+            word-break: break-all;
+        }
+
+        .misc-list-item .value {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dark);
+            word-break: break-all;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .misc-list-item .value.empty {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Download Section */
+        .download-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--bg-white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .download-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .download-section p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .download-btn:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+        }
+
+        .download-btn .icon {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📍 PredicT Properties</h1>
+            <p>List of properties for the prediction experiment, only one will be evaluated by an expert</p>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid">
+            <!-- Properties will be inserted here -->
+        </div>
+
+        <div class="download-section">
+            <h3>📥 Export Data</h3>
+            <p>Download the complete dataset with all property information in CSV format</p>
+            <button class="download-btn" onclick="downloadCSV()">
+                <span class="icon">📄</span>
+                <span>Download CSV with All Data</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const miscData = {
+            "23750 W 7 Mile Rd, Detroit, MI 48219": {
+                "shortName": "23750 W 7 Mile",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "18700",
+                "uuid": "0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf",
+                "ethereumContract": "0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf",
+                "xDaiContract": "0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf",
+                "gnosisContract": "0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf",
+                "goerliContract": "",
+                "grossRentMonth": "13280",
+                "netRentDayPerToken": "0.012597758405978",
+                "netRentMonthPerToken": "0.38318181818182",
+                "netRentYearPerToken": "4.5981818181818",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x484e823FfAB71debb0a0d212e240E76737210998\"}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf",
+                "blockchainAddresses_ethereum_distributor": "0x0ef5E541B513cF3920b296FF8D57503D6D2ef148",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf",
+                "blockchainAddresses_xDai_distributor": "0x0ef5E541B513cF3920b296FF8D57503D6D2ef148",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0x181f9509be059FCEC48f66A2EEC489ac0892F2b2",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:10.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x484e823FfAB71debb0a0d212e240E76737210998\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100685",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "94453.7",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "18881 Mound Rd, Detroit, MI 48234": {
+                "shortName": "18881 Mound",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "6700",
+                "uuid": "0x5c4e3fa9704d4212c6434190af6379cfbda47e13",
+                "ethereumContract": "0x5c4e3fa9704d4212c6434190af6379cfbda47e13",
+                "xDaiContract": "0x5c4e3fa9704d4212c6434190af6379cfbda47e13",
+                "gnosisContract": "0x5c4e3fa9704d4212c6434190af6379cfbda47e13",
+                "goerliContract": "",
+                "grossRentMonth": "5550",
+                "netRentDayPerToken": "0.012537313432836",
+                "netRentMonthPerToken": "0.38134328358209",
+                "netRentYearPerToken": "4.5761194029851",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x15dAb55Ad786E16CeC3bD42388287A12227Cd9F8\"}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0x5c4e3fa9704d4212c6434190af6379cfbda47e13",
+                "blockchainAddresses_ethereum_distributor": "0xa55DfE468d6BaFbee51e868366D878057E0E09B0",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0x5c4e3fa9704d4212c6434190af6379cfbda47e13",
+                "blockchainAddresses_xDai_distributor": "0xa55DfE468d6BaFbee51e868366D878057E0E09B0",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0x3Db83012dFfe877cDC9a98cBf7165a2c2b2cC365",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:10.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x15dAb55Ad786E16CeC3bD42388287A12227Cd9F8\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100684",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "33634",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "14631-14633 Plymouth Rd, Detroit, MI 48227": {
+                "shortName": "14631-14633 Plymouth",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "27500",
+                "uuid": "0x854a0cfa24012937d3d15682ecc3d5b474bfa97e",
+                "ethereumContract": "0x854a0cfa24012937d3d15682ecc3d5b474bfa97e",
+                "xDaiContract": "0x854a0cfa24012937d3d15682ecc3d5b474bfa97e",
+                "gnosisContract": "0x854a0cfa24012937d3d15682ecc3d5b474bfa97e",
+                "goerliContract": "",
+                "grossRentMonth": "20800",
+                "netRentDayPerToken": "0.012636612702366",
+                "netRentMonthPerToken": "0.38436363636364",
+                "netRentYearPerToken": "4.6123636363636",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x1038e0C43D15bD59ed0adA5e3D4EA4e2F9f1Db09\"}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0x854a0cfa24012937d3d15682ecc3d5b474bfa97e",
+                "blockchainAddresses_ethereum_distributor": "0xfC5dc2de209eb1895b7b0e38b0ccB7E0A7F40FA1",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0x854a0cfa24012937d3d15682ecc3d5b474bfa97e",
+                "blockchainAddresses_xDai_distributor": "0xfC5dc2de209eb1895b7b0e38b0ccB7E0A7F40FA1",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0x7dc63C0F5B58aa060CF38836f1FC26e5120FFDf4",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:10.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x1038e0C43D15bD59ed0adA5e3D4EA4e2F9f1Db09\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100683",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "138902.5",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "11373 Prest St, Detroit, MI 48227": {
+                "shortName": "11373 Prest",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "1530",
+                "uuid": "0xd8b19f31186fc7350be018651aa1383175923bb3",
+                "ethereumContract": "0xd8b19f31186fc7350be018651aa1383175923bb3",
+                "xDaiContract": "0xd8b19f31186fc7350be018651aa1383175923bb3",
+                "gnosisContract": "0xd8b19f31186fc7350be018651aa1383175923bb3",
+                "goerliContract": "",
+                "grossRentMonth": "1010",
+                "netRentDayPerToken": "0.012441579371475",
+                "netRentMonthPerToken": "0.37843137254902",
+                "netRentYearPerToken": "4.5411764705882",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x7f7735bf5f11F0d09ccb69201b1A2f8C4671a1fA\"}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0xd8b19f31186fc7350be018651aa1383175923bb3",
+                "blockchainAddresses_ethereum_distributor": "0xb8Eac9EDfd9686F2D70a4087735aF5B6C7AC0Ede",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0xd8b19f31186fc7350be018651aa1383175923bb3",
+                "blockchainAddresses_xDai_distributor": "0xb8Eac9EDfd9686F2D70a4087735aF5B6C7AC0Ede",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611Ee6524D75FC45E3739F472F83e282AD5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0x58121CFB6eB61843Ac38Ff7DF0A259d89CB82f33",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:10.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x7f7735bf5f11F0d09ccb69201b1A2f8C4671a1fA\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100682",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "7680.6",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "16728-16730 Woodingham Dr, Detroit, MI 48221": {
+                "shortName": "16728-16730 Woodingham",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "2850",
+                "uuid": "0xc7697f5e86a102eaf4000719a2dc477d65beea7d",
+                "ethereumContract": "0xc7697f5e86a102eaf4000719a2dc477d65beea7d",
+                "xDaiContract": "0xc7697f5e86a102eaf4000719a2dc477d65beea7d",
+                "gnosisContract": "0xc7697f5e86a102eaf4000719a2dc477d65beea7d",
+                "goerliContract": "",
+                "grossRentMonth": "1850",
+                "netRentDayPerToken": "0.013900504686373",
+                "netRentMonthPerToken": "0.42280701754386",
+                "netRentYearPerToken": "5.0736842105263",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x42d7b83f9a1b818228e694c48a57470456d94759\",\"pair\":{\"contract\":\"0xddafbb505ad214d7b80b1f830fccc89b60fb7a83\",\"symbol\":\"USDC\",\"name\":\"USD//C on xDai\"}}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0xc7697f5e86a102eaf4000719a2dc477d65beea7d",
+                "blockchainAddresses_ethereum_distributor": "0x078a64aC4717975983F21C696765bb335EAB46E7",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0xc7697f5e86a102eaf4000719a2dc477d65beea7d",
+                "blockchainAddresses_xDai_distributor": "0x078a64aC4717975983F21C696765bb335EAB46E7",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0xCc49b180782123126F52553259E5cA8d601c7422",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:00.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x42d7b83f9a1b818228e694c48a57470456d94759\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100450",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "14388.89",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "9518 Franklin Dr, Mont Belvieu, TX 77523": {
+                "shortName": "9518 Franklin",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "9100",
+                "uuid": "0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b",
+                "ethereumContract": "0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b",
+                "xDaiContract": "0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b",
+                "gnosisContract": "0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b",
+                "goerliContract": "",
+                "grossRentMonth": "3980",
+                "netRentDayPerToken": "0.0095053439710974",
+                "netRentMonthPerToken": "0.28912087912088",
+                "netRentYearPerToken": "3.4694505494505",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0xeE365Cc33a9EBd6cD7DA947133E4102830BBe29d\",\"pair\":{\"contract\":\"0xddafbb505ad214d7b80b1f830fccc89b60fb7a83\",\"symbol\":\"USDC\",\"name\":\"USD//C on xDai\"}}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b",
+                "blockchainAddresses_ethereum_distributor": "0x3AC5196EdcFb9b4ACa27Ac70680F8039E25dbf72",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b",
+                "blockchainAddresses_xDai_distributor": "0x3AC5196EdcFb9b4ACa27Ac70680F8039E25dbf72",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611Ee6524D75FC45E3739F472F83e282AD5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0xACb83C3B7b8c4Be550c865786886Fa00c1C02F1e",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:07.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0xeE365Cc33a9EBd6cD7DA947133E4102830BBe29d\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100632",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "46164.3",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "8034 Faith Ln, Montgomery, AL 36117": {
+                "shortName": "8034 Faith",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "6400",
+                "uuid": "0x90d280b6456f8233e115e6aabb2ca89249dafd39",
+                "ethereumContract": "0x90d280b6456f8233e115e6aabb2ca89249dafd39",
+                "xDaiContract": "0x90d280b6456f8233e115e6aabb2ca89249dafd39",
+                "gnosisContract": "0x90d280b6456f8233e115e6aabb2ca89249dafd39",
+                "goerliContract": "",
+                "grossRentMonth": "2550",
+                "netRentDayPerToken": "0.010212328767123",
+                "netRentMonthPerToken": "0.310625",
+                "netRentYearPerToken": "3.7275",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0xb7b47441443663278a1d698150a5d484a36ab7bf\",\"pair\":{\"contract\":\"0xddafbb505ad214d7b80b1f830fccc89b60fb7a83\",\"symbol\":\"USDC\",\"name\":\"USD//C on xDai\"}}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0x90d280b6456f8233e115e6aabb2ca89249dafd39",
+                "blockchainAddresses_ethereum_distributor": "0x560158e1f02abF12b203616bE80663844174BD27",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0x90d280b6456f8233e115e6aabb2ca89249dafd39",
+                "blockchainAddresses_xDai_distributor": "0x560158e1f02abF12b203616bE80663844174BD27",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0x336ACb0c00cED56980C4Cd471c8Cd23CC9bDc806",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:33:57.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0xb7b47441443663278a1d698150a5d484a36ab7bf\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100392",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.08",
+                "realtListingFee": "26182.61",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "1769 Cheryl Ave, Griffin, GA 30224": {
+                "shortName": "1769 Cheryl",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "6200",
+                "uuid": "0x19f824662ba9df78e368022f085b708fccc201c8",
+                "ethereumContract": "0x19f824662ba9df78e368022f085b708fccc201c8",
+                "xDaiContract": "0x19f824662ba9df78e368022f085b708fccc201c8",
+                "gnosisContract": "0x19f824662ba9df78e368022f085b708fccc201c8",
+                "goerliContract": "",
+                "grossRentMonth": "2600",
+                "netRentDayPerToken": "0.0097516570923553",
+                "netRentMonthPerToken": "0.29661290322581",
+                "netRentYearPerToken": "3.5593548387097",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x6aabe06a8ef91553c6fc8db8beb3459c0af7843f\",\"pair\":{\"contract\":\"0xddafbb505ad214d7b80b1f830fccc89b60fb7a83\",\"symbol\":\"USDC\",\"name\":\"USD//C on xDai\"}}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0x19f824662ba9df78e368022f085b708fccc201c8",
+                "blockchainAddresses_ethereum_distributor": "0x9B1Efb16Fc175490e9966fe91443368e7Fbafc4d",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0x19f824662ba9df78e368022f085b708fccc201c8",
+                "blockchainAddresses_xDai_distributor": "0x9B1Efb16Fc175490e9966fe91443368e7Fbafc4d",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0xd50539035038dEd1681e35712fcC6ABb4529A682",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:33:58.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x6aabe06a8ef91553c6fc8db8beb3459c0af7843f\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100406",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.08",
+                "realtListingFee": "24582.61",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+            "9311 Bedford St, Detroit, MI 48224": {
+                "shortName": "9311 Bedford",
+                "productType": "real_estate_rental",
+                "canal": "release",
+                "currency": "USD",
+                "totalTokensRegSummed": "1800",
+                "uuid": "0xa83cbd26964ea953f86c741871a1ab2a256cb82d",
+                "ethereumContract": "0xa83cbd26964ea953f86c741871a1ab2a256cb82d",
+                "xDaiContract": "0xa83cbd26964ea953f86c741871a1ab2a256cb82d",
+                "gnosisContract": "0xa83cbd26964ea953f86c741871a1ab2a256cb82d",
+                "goerliContract": "",
+                "grossRentMonth": "1200",
+                "netRentDayPerToken": "0.012511415525114",
+                "netRentMonthPerToken": "0.38055555555556",
+                "netRentYearPerToken": "4.5666666666667",
+                "termOfLease": "",
+                "renewalDate": "",
+                "section8paid": "0",
+                "subsidyStatus": "no",
+                "subsidyStatusValue": "",
+                "subsidyBy": "",
+                "sellPropertyTo": "intl_investors_only",
+                "secondaryMarketplace_UniswapV1": "0",
+                "secondaryMarketplace_UniswapV2": "0",
+                "secondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x059E2aFFC065Df064FeBAafe917456be1ef224Ae\",\"pair\":{\"contract\":\"0xddafbb505ad214d7b80b1f830fccc89b60fb7a83\",\"symbol\":\"USDC\",\"name\":\"USD//C on xDai\"}}]",
+                "blockchainAddresses_ethereum_chainName": "Ethereum",
+                "blockchainAddresses_ethereum_chainId": "1",
+                "blockchainAddresses_ethereum_contract": "0xa83cbd26964ea953f86c741871a1ab2a256cb82d",
+                "blockchainAddresses_ethereum_distributor": "0xf74A0A6b0A8e3d69453F05c258afB46429dBD0a2",
+                "blockchainAddresses_ethereum_maintenance": "0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a",
+                "blockchainAddresses_xDai_chainName": "xDaiChain",
+                "blockchainAddresses_xDai_chainId": "100",
+                "blockchainAddresses_xDai_contract": "0xa83cbd26964ea953f86c741871a1ab2a256cb82d",
+                "blockchainAddresses_xDai_distributor": "0xf74A0A6b0A8e3d69453F05c258afB46429dBD0a2",
+                "blockchainAddresses_xDai_rmmPoolAddress": "0",
+                "blockchainAddresses_xDai_rmmV3WrapperAddress": "0x10497611ee6524d75fc45e3739f472f83e282ad5",
+                "blockchainAddresses_xDai_chainlinkPriceContract": "0xe39A0b4Ec96aDA33fEbc231dFa1fE6b9E4DB4134",
+                "blockchainAddresses_sepolia_chainName": "Sepolia testnet",
+                "blockchainAddresses_sepolia_chainId": "11155111",
+                "blockchainAddresses_sepolia_contract": "0",
+                "blockchainAddresses_sepolia_distributor": "0",
+                "blockchainAddresses_sepolia_rmmPoolAddress": "0",
+                "blockchainAddresses_sepolia_chainlinkPriceContract": "0",
+                "rentStartDate_timezone_type": "3",
+                "rentStartDate_timezone": "UTC",
+                "lastUpdate_date": "2026-01-27 16:34:05.000000",
+                "lastUpdate_timezone_type": "3",
+                "lastUpdate_timezone": "UTC",
+                "originSecondaryMarketplaces": "[{\"chainId\":100,\"chainName\":\"xDaiChain\",\"dexName\":\"LevinSwap\",\"contractPool\":\"0x059E2aFFC065Df064FeBAafe917456be1ef224Ae\"}]",
+                "initialLaunchDate_timezone_type": "3",
+                "initialLaunchDate_timezone": "UTC",
+                "assetParking": "",
+                "tokenIdRules": "100577",
+                "rentCalculationType": "constant",
+                "realtListingFeePercent": "0.1",
+                "realtListingFee": "9027",
+                "propertyStories": "",
+                "tokenPrices": "",
+                "renovationPoolMonthlyPercentFee": "",
+                "renovationPoolInitialFee": "",
+                "rentalHistory": "",
+            },
+        };
+
+const properties = [
+            {
+                fullName: "23750 W 7 Mile Rd, Detroit, MI 48219",
+                lat: 42.429298,
+                lng: -83.274959,
+                totalInvestment: 944537,
+                sqFt: 11944,
+                propertyType: "Multi Family",
+                grossRentYear: 159360,
+                netRentYear: 85986,
+                launchDate: "2024-12-20",
+                yield: 9.10,
+                bedBath: "17x1 Bed / 17x1 Bath",
+                totalUnits: 17,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-w-7-mile-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-4.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-stairs-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-hall-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-hall-4.jpg"
+                ],
+                // Additional details from CSV
+                shortName: "23750 W 7 Mile",
+                symbol: "REALTOKEN-S-23750-W-7-MILE-RD-DETROIT-MI",
+                tokenPrice: 50.51,
+                totalTokens: 18700,
+                currency: "USD",
+                propertyManagement: 1062.4,
+                propertyManagementPercent: 8,
+                realtPlatform: 265.6,
+                realtPlatformPercent: 2,
+                insurance: 1360,
+                propertyTaxes: 775,
+                utilities: 1651.5,
+                initialMaintenanceReserve: 36560,
+                netRentMonth: 7165.5,
+                netRentDay: 235.58,
+                marketplaceLink: "https://realt.co/product/23750-w-7-mile-rd-detroit-mi-48219/",
+                lotSize: 13068,
+                hasTenants: true,
+                rentedUnits: 17,
+                underlyingAssetPrice: 780000,
+                renovationReserve: 32000,
+                propertyMaintenanceMonthly: 1000,
+                rentStartDate: "2025-02-15",
+                seriesNumber: 686,
+                constructionYear: 1955,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Seven Mile - Rouge",
+                rentalType: "long_term",
+                miscellaneousCosts: 600
+            },
+            {
+                fullName: "18881 Mound Rd, Detroit, MI 48234",
+                lat: 42.432798,
+                lng: -83.044147,
+                totalInvestment: 336340,
+                sqFt: 3732,
+                propertyType: "Multi Family",
+                grossRentYear: 66600,
+                netRentYear: 30660,
+                launchDate: "2024-12-13",
+                yield: 9.12,
+                bedBath: "8x1 Bed / 8x1 Bath",
+                totalUnits: 8,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-3.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-door-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-back-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/18881-Mound-back-side-1.jpg"
+                ],
+                shortName: "18881 Mound",
+                symbol: "REALTOKEN-S-18881-MOUND-RD-DETROIT-MI",
+                tokenPrice: 50.2,
+                totalTokens: 6700,
+                currency: "USD",
+                propertyManagement: 444,
+                propertyManagementPercent: 8,
+                realtPlatform: 111,
+                realtPlatformPercent: 2,
+                insurance: 640,
+                propertyTaxes: 400,
+                utilities: 600,
+                initialMaintenanceReserve: 11100,
+                netRentMonth: 2555,
+                netRentDay: 84,
+                marketplaceLink: "https://realt.co/product/18881-mound-rd-detroit-mi-48234/",
+                lotSize: null,
+                hasTenants: true,
+                rentedUnits: 8,
+                underlyingAssetPrice: 270000,
+                renovationReserve: 20000,
+                propertyMaintenanceMonthly: 800,
+                rentStartDate: "2025-03-15",
+                seriesNumber: 688,
+                constructionYear: 1959,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Krainz Woods",
+                rentalType: "long_term",
+                miscellaneousCosts: 600
+            },
+            {
+                fullName: "14631-14633 Plymouth Rd, Detroit, MI 48227",
+                lat: 42.372607,
+                lng: -83.188424,
+                totalInvestment: 1389025,
+                sqFt: 15292,
+                propertyType: "Multi Family",
+                grossRentYear: 249600,
+                netRentYear: 126840,
+                launchDate: "2024-12-13",
+                yield: 9.13,
+                bedBath: "27x1 Bed / 27x1 Bath",
+                totalUnits: 27,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-side-3.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-door-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-back-side-4.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-back-side-3.jpg"
+                ],
+                shortName: "14631-14633 Plymouth",
+                symbol: "REALTOKEN-S-14631-14633-PLYMOUTH-RD-DETROIT-MI",
+                tokenPrice: 50.51,
+                totalTokens: 27500,
+                currency: "USD",
+                propertyManagement: 1664,
+                propertyManagementPercent: 8,
+                realtPlatform: 416,
+                realtPlatformPercent: 2,
+                insurance: 1900,
+                propertyTaxes: 1300,
+                utilities: 2800,
+                initialMaintenanceReserve: 41600,
+                netRentMonth: 10570,
+                netRentDay: 347.51,
+                marketplaceLink: "https://realt.co/product/14631-14633-plymouth-rd-detroit-mi-48227/",
+                lotSize: null,
+                hasTenants: true,
+                rentedUnits: 27,
+                underlyingAssetPrice: 1150000,
+                renovationReserve: 57000,
+                propertyMaintenanceMonthly: 2150,
+                rentStartDate: "2025-03-15",
+                seriesNumber: 687,
+                constructionYear: 1952,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Plymouth - Hubbell",
+                rentalType: "long_term",
+                miscellaneousCosts: 600
+            },
+            {
+                fullName: "11373 Prest St, Detroit, MI 48227",
+                lat: 42.371296,
+                lng: -83.196702,
+                totalInvestment: 76806,
+                sqFt: 864,
+                propertyType: "Single Family",
+                grossRentYear: 12120,
+                netRentYear: 6948,
+                launchDate: "2024-12-06",
+                yield: 9.05,
+                bedBath: "3 Beds / 1 Bath",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-3.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-door-1-.jpg",
+                    "https://realt.co/wp-content/uploads/2024/12/11373-Prest-kitchen-1.jpg"
+                ],
+                shortName: "11373 Prest",
+                symbol: "REALTOKEN-S-11373-PREST-ST-DETROIT-MI",
+                tokenPrice: 50.2,
+                totalTokens: 1530,
+                currency: "USD",
+                propertyManagement: 80.8,
+                propertyManagementPercent: 8,
+                realtPlatform: 20.2,
+                realtPlatformPercent: 2,
+                insurance: 90,
+                propertyTaxes: 120,
+                utilities: 0,
+                initialMaintenanceReserve: 2020,
+                netRentMonth: 579,
+                netRentDay: 19.04,
+                marketplaceLink: "https://realt.co/product/11373-prest-st-detroit-mi-48227/",
+                lotSize: 3702,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 63000,
+                renovationReserve: 3000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2025-03-01",
+                seriesNumber: 684,
+                constructionYear: 1949,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Gas / Forced Air",
+                cooling: "",
+                neighborhood: "Plymuth - Hubbell",
+                rentalType: "long_term",
+                miscellaneousCosts: 500
+            },
+            {
+                fullName: "16728-16730 Woodingham Dr, Detroit, MI 48221",
+                lat: 42.415419,
+                lng: -83.149859,
+                totalInvestment: 143896.5,
+                sqFt: 1868,
+                propertyType: "Duplex",
+                grossRentYear: 22200,
+                netRentYear: 14460,
+                launchDate: "2023-12-09",
+                yield: 10.05,
+                bedBath: "2x2 Beds / 2x1 Bath",
+                totalUnits: 2,
+                images: [
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-front-hero-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-side-2-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-side-1-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-back-1-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-outside-1-fix.jpg",
+                    "https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-outside-2-fix.jpg"
+                ],
+                shortName: "16728-16730 Woodingham",
+                symbol: "REALTOKEN-S-16728-16730-WOODINGHAM-DR-DETROIT-MI",
+                tokenPrice: 50.49,
+                totalTokens: 2850,
+                currency: "USD",
+                propertyManagement: 148,
+                propertyManagementPercent: 8,
+                realtPlatform: 37,
+                realtPlatformPercent: 2,
+                insurance: 130,
+                propertyTaxes: 150,
+                utilities: 0,
+                initialMaintenanceReserve: 3700,
+                netRentMonth: 1205,
+                netRentDay: 39.62,
+                marketplaceLink: "https://realt.co/product/16728-16730-woodingham-dr-detroit-mi-48221/",
+                lotSize: 3398,
+                hasTenants: true,
+                rentedUnits: 2,
+                underlyingAssetPrice: 98000,
+                renovationReserve: 25000,
+                propertyMaintenanceMonthly: 180,
+                rentStartDate: "2024-02-01",
+                seriesNumber: 432,
+                constructionYear: 1928,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Masonry",
+                heating: "Forced Air w/o Ducts",
+                cooling: "",
+                neighborhood: "Maygrove",
+                rentalType: "long_term",
+                miscellaneousCosts: 300
+            },
+            {
+                fullName: "9518 Franklin Dr, Mont Belvieu, TX 77523",
+                lat: 29.832396,
+                lng: -94.853589,
+                totalInvestment: 461643,
+                sqFt: 3358,
+                propertyType: "Single Family",
+                grossRentYear: 47760,
+                netRentYear: 31572,
+                launchDate: "2024-10-18",
+                yield: 6.84,
+                bedBath: "4 Beds / 3.5 Baths",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-aereal-garage-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-garden-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-back-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-back-2.jpg",
+                    "https://realt.co/wp-content/uploads/2024/10/9518-franklin-pool-4.jpg"
+                ],
+                shortName: "9518 Franklin",
+                symbol: "REALTOKEN-S-9518-FRANKLIN-DR-MONT-BELVIEU-TX",
+                tokenPrice: 50.73,
+                totalTokens: 9100,
+                currency: "USD",
+                propertyManagement: 318.4,
+                propertyManagementPercent: 8,
+                realtPlatform: 79.6,
+                realtPlatformPercent: 2,
+                insurance: 110,
+                propertyTaxes: 721,
+                utilities: 0,
+                initialMaintenanceReserve: 7960,
+                netRentMonth: 2631,
+                netRentDay: 86.5,
+                marketplaceLink: "https://realt.co/product/9518-franklin-dr-mont-belvieu-tx-77523/",
+                lotSize: 11761,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 401000,
+                renovationReserve: 5000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2025-01-15",
+                seriesNumber: 629,
+                constructionYear: 2017,
+                constructionType: "Brick, Vinyl Siding",
+                roofType: "Composition",
+                foundation: "Slab",
+                heating: "Central Air, Electric, Gas",
+                cooling: "Central",
+                neighborhood: "Mont Belvieu",
+                rentalType: "long_term",
+                miscellaneousCosts: 500
+            },
+            {
+                fullName: "8034 Faith Ln, Montgomery, AL 36117",
+                lat: 32.352942,
+                lng: -86.135603,
+                totalInvestment: 327296,
+                sqFt: 1923,
+                propertyType: "Single Family",
+                grossRentYear: 30600,
+                netRentYear: 23856,
+                launchDate: "2023-08-25",
+                yield: 7.29,
+                bedBath: "3 Beds / 2 Baths",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-front-hero.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-garden-1.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-garden-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-front-door.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-kitchen.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-livingroom.jpg",
+                    "https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-room-1.jpg"
+                ],
+                shortName: "8034 Faith",
+                symbol: "REALTOKEN-S-8034-FAITH-LN-MONTGOMERY-AL",
+                tokenPrice: 51.14,
+                totalTokens: 6400,
+                currency: "USD",
+                propertyManagement: 204,
+                propertyManagementPercent: 8,
+                realtPlatform: 51,
+                realtPlatformPercent: 2,
+                insurance: 67,
+                propertyTaxes: 120,
+                utilities: 0,
+                initialMaintenanceReserve: 5100,
+                netRentMonth: 1988,
+                netRentDay: 65.36,
+                marketplaceLink: "https://realt.co/product/8034-faith-ln-montgomery-al-36117/",
+                lotSize: 7175,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 287500,
+                renovationReserve: 3000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2023-10-01",
+                seriesNumber: 364,
+                constructionYear: 2017,
+                constructionType: "Brick / Vinyl Siding",
+                roofType: "Composition Shingles",
+                foundation: "Slab",
+                heating: "Heat Pump / Gas",
+                cooling: "Heat Pump",
+                neighborhood: "Ryan Ridge",
+                rentalType: "long_term",
+                miscellaneousCosts: 4000
+            },
+            {
+                fullName: "1769 Cheryl Ave, Griffin, GA 30224",
+                lat: 33.224176,
+                lng: -84.310708,
+                totalInvestment: 307272,
+                sqFt: 1680,
+                propertyType: "Single Family",
+                grossRentYear: 31200,
+                netRentYear: 22068,
+                launchDate: "2023-09-21",
+                yield: 7.18,
+                bedBath: "3 Beds / 3 Baths",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-front-hero.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-side-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-back-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-kitchen-2.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-livingroom-1.jpg",
+                    "https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-room-1.jpg"
+                ],
+                shortName: "1769 Cheryl",
+                symbol: "REALTOKEN-S-1769-CHERYL-AVE-GRIFFIN-GA",
+                tokenPrice: 49.56,
+                totalTokens: 6200,
+                currency: "USD",
+                propertyManagement: 208,
+                propertyManagementPercent: 8,
+                realtPlatform: 52,
+                realtPlatformPercent: 2,
+                insurance: 60,
+                propertyTaxes: 321,
+                utilities: 0,
+                initialMaintenanceReserve: 5200,
+                netRentMonth: 1839,
+                netRentDay: 60.46,
+                marketplaceLink: "https://realt.co/product/1769-cheryl-ave-griffin-ga-30224/",
+                lotSize: 11761,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 250000,
+                renovationReserve: 3000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2023-12-01",
+                seriesNumber: 387,
+                constructionYear: 2021,
+                constructionType: "Concrete",
+                roofType: "Composition Shingles",
+                foundation: "Poured Concrete",
+                heating: "Central Air",
+                cooling: "Central Air",
+                neighborhood: "Powers Court",
+                rentalType: "long_term",
+                miscellaneousCosts: 23000
+            },
+            {
+                fullName: "9311 Bedford St, Detroit, MI 48224",
+                lat: 42.411886,
+                lng: -82.948675,
+                totalInvestment: 90270,
+                sqFt: 1170,
+                propertyType: "Single Family",
+                grossRentYear: 14400,
+                netRentYear: 8220,
+                launchDate: "2024-06-14",
+                yield: 9.11,
+                bedBath: "3 Beds / 1 Bath",
+                totalUnits: 1,
+                images: [
+                    "https://realt.co/wp-content/uploads/2024/06/9311-Bedford-front-flat-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/06/9311-Bedford-front-side-1.jpg",
+                    "https://realt.co/wp-content/uploads/2024/06/9311-Bedford-side-1.jpg"
+                ],
+                shortName: "9311 Bedford",
+                symbol: "REALTOKEN-S-9311-BEDFORD-ST-DETROIT-MI",
+                tokenPrice: 50.15,
+                totalTokens: 1800,
+                currency: "USD",
+                propertyManagement: 96,
+                propertyManagementPercent: 8,
+                realtPlatform: 24,
+                realtPlatformPercent: 2,
+                insurance: 85,
+                propertyTaxes: 190,
+                utilities: 0,
+                initialMaintenanceReserve: 2400,
+                netRentMonth: 685,
+                netRentDay: 22.52,
+                marketplaceLink: "https://realt.co/product/9311-bedford-st-detroit-mi-48224/",
+                lotSize: 3920,
+                hasTenants: true,
+                rentedUnits: 1,
+                underlyingAssetPrice: 66000,
+                renovationReserve: 10000,
+                propertyMaintenanceMonthly: 120,
+                rentStartDate: "2024-08-15",
+                seriesNumber: 565,
+                constructionYear: 1936,
+                constructionType: "Brick",
+                roofType: "Asphalt",
+                foundation: "Block",
+                heating: "Gas / Forced Air not Ducted",
+                cooling: "",
+                neighborhood: "Yorkshire Woods",
+                rentalType: "long_term",
+                miscellaneousCosts: 350
+            }
+        ];
+
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        };
+
+        const formatCurrencyDecimals = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value);
+        };
+
+        const formatDate = (dateStr) => {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        };
+
+        const formatNumber = (value) => {
+            if (value === null || value === undefined || value === '') return 'N/A';
+            return new Intl.NumberFormat('en-US').format(value);
+        };
+
+        const grid = document.getElementById('propertiesGrid');
+
+        properties.forEach((prop, index) => {
+            const card = document.createElement('div');
+            card.className = 'property-card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="location-icon">📍</span>
+                    <span class="address">${prop.fullName}</span>
+                    <span class="coordinates">(${prop.lat}, ${prop.lng})</span>
+                </div>
+                <div class="card-body">
+                    <div class="stats-section">
+                        <div class="main-stat">
+                            <div class="icon">$</div>
+                            <div class="content">
+                                <div class="value">${formatCurrency(prop.totalInvestment)}</div>
+                                <div class="label">Total investment</div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="icon">🏠</span>
+                                <div class="info">
+                                    <span class="value">${prop.sqFt.toLocaleString()} sq ft</span>
+                                    <span class="label">Size</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="icon">🏢</span>
+                                <div class="info">
+                                    <span class="value">${prop.propertyType}</span>
+                                    <span class="label">Type</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="icon">🛏️</span>
+                                <div class="info">
+                                    <span class="value">${prop.bedBath}</span>
+                                    <span class="label">Beds / Baths</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="icon">🔑</span>
+                                <div class="info">
+                                    <span class="value">${prop.totalUnits}</span>
+                                    <span class="label">Units</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="financial-row">
+                            <div class="financial-item">
+                                <div class="label">Gross Rent Year</div>
+                                <div class="value">${formatCurrency(prop.grossRentYear)}</div>
+                            </div>
+                            <div class="financial-item">
+                                <div class="label">Net Rent Year</div>
+                                <div class="value">${formatCurrency(prop.netRentYear)}</div>
+                            </div>
+                        </div>
+
+                        <div class="yield-badge">
+                            <span class="icon">📈</span>
+                            <span class="text">${prop.yield.toFixed(2)}%</span>
+                            <span class="label">Annual Percentage Yield</span>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-section">
+                        <div class="launch-badge">
+                            <span class="icon">📅</span>
+                            <span>${formatDate(prop.launchDate)}</span>
+                            <span style="opacity: 0.7;">Initial Launch Date</span>
+                        </div>
+                        <div class="carousel" data-index="${index}">
+                            <div class="carousel-track" id="track-${index}">
+                                ${prop.images.map((img, i) => `
+                                    <div class="carousel-slide">
+                                        <img src="${img}" alt="Property image ${i + 1}" loading="lazy">
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="carousel-btn prev" onclick="moveCarousel(${index}, -1)">‹</button>
+                            <button class="carousel-btn next" onclick="moveCarousel(${index}, 1)">›</button>
+                            <div class="carousel-dots" id="dots-${index}">
+                                ${prop.images.slice(0, 7).map((_, i) => `
+                                    <div class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${index}, ${i})"></div>
+                                `).join('')}
+                            </div>
+                            <div class="image-counter" id="counter-${index}">1 / ${prop.images.length}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- More Details Dropdown -->
+                <div class="more-details-section">
+                    <button class="more-details-toggle" onclick="toggleDetails(${index})">
+                        <span>📋 More Details</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                    <div class="more-details-content" id="details-${index}">
+                        <div class="details-category">
+                            <div class="details-category-title">🪙 Token Information</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Token Price</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.tokenPrice)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Total Tokens</span>
+                                    <span class="value">${formatNumber(prop.totalTokens)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Symbol</span>
+                                    <span class="value" style="font-size: 11px; word-break: break-all;">${prop.symbol}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Series Number</span>
+                                    <span class="value">#${prop.seriesNumber}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Marketplace</span>
+                                    <span class="value"><a href="${prop.marketplaceLink}" target="_blank">View on RealT</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-category">
+                            <div class="details-category-title">💰 Financial Details</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Underlying Asset Price</span>
+                                    <span class="value">${formatCurrency(prop.underlyingAssetPrice)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Net Rent / Month</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.netRentMonth)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Net Rent / Day</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.netRentDay)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Property Management</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.propertyManagement)}/mo (${prop.propertyManagementPercent}%)</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">RealT Platform Fee</span>
+                                    <span class="value">${formatCurrencyDecimals(prop.realtPlatform)}/mo (${prop.realtPlatformPercent}%)</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Insurance</span>
+                                    <span class="value">${formatCurrency(prop.insurance)}/yr</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Property Taxes</span>
+                                    <span class="value">${formatCurrency(prop.propertyTaxes)}/yr</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Utilities</span>
+                                    <span class="value">${prop.utilities > 0 ? formatCurrency(prop.utilities) + '/yr' : 'Tenant Paid'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Initial Maintenance Reserve</span>
+                                    <span class="value">${formatCurrency(prop.initialMaintenanceReserve)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Renovation Reserve</span>
+                                    <span class="value">${formatCurrency(prop.renovationReserve)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Monthly Maintenance</span>
+                                    <span class="value">${formatCurrency(prop.propertyMaintenanceMonthly)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Miscellaneous Costs</span>
+                                    <span class="value">${formatCurrency(prop.miscellaneousCosts)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-category">
+                            <div class="details-category-title">🏗️ Property Details</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Lot Size</span>
+                                    <span class="value">${prop.lotSize ? formatNumber(prop.lotSize) + ' sq ft' : 'N/A'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Construction Year</span>
+                                    <span class="value">${prop.constructionYear}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Construction Type</span>
+                                    <span class="value">${prop.constructionType}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Roof Type</span>
+                                    <span class="value">${prop.roofType}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Foundation</span>
+                                    <span class="value">${prop.foundation}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Heating</span>
+                                    <span class="value">${prop.heating || 'N/A'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Cooling</span>
+                                    <span class="value">${prop.cooling || 'N/A'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Neighborhood</span>
+                                    <span class="value">${prop.neighborhood}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-category">
+                            <div class="details-category-title">👥 Rental Information</div>
+                            <div class="details-list">
+                                <div class="details-list-item">
+                                    <span class="label">Has Tenants</span>
+                                    <span class="value">${prop.hasTenants ? 'Yes' : 'No'}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Rented Units</span>
+                                    <span class="value">${prop.rentedUnits} / ${prop.totalUnits}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Rent Start Date</span>
+                                    <span class="value">${formatDate(prop.rentStartDate)}</span>
+                                </div>
+                                <div class="details-list-item">
+                                    <span class="label">Rental Type</span>
+                                    <span class="value">${prop.rentalType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Misc Data Dropdown -->
+                <button class="misc-details-toggle" onclick="toggleMiscDetails(${index})">
+                    <span>🗄️ Misc Data (${Object.keys(miscData[prop.fullName] || {}).length} fields)</span>
+                    <span class="toggle-icon">▼</span>
+                </button>
+                <div class="misc-details-content" id="misc-${index}">
+                    <div class="misc-list">
+                        ${Object.entries(miscData[prop.fullName] || {}).map(([key, value]) => `
+                            <div class="misc-list-item">
+                                <span class="label">${key}</span>
+                                <span class="value ${!value ? 'empty' : ''}">${value || '(empty)'}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Carousel state
+        const carouselStates = properties.map(() => ({ current: 0 }));
+
+        function moveCarousel(index, direction) {
+            const prop = properties[index];
+            const state = carouselStates[index];
+            const maxIndex = prop.images.length - 1;
+            
+            state.current += direction;
+            if (state.current < 0) state.current = maxIndex;
+            if (state.current > maxIndex) state.current = 0;
+            
+            updateCarousel(index);
+        }
+
+        function goToSlide(index, slideIndex) {
+            carouselStates[index].current = slideIndex;
+            updateCarousel(index);
+        }
+
+        function updateCarousel(index) {
+            const state = carouselStates[index];
+            const track = document.getElementById(`track-${index}`);
+            const counter = document.getElementById(`counter-${index}`);
+            const dotsContainer = document.getElementById(`dots-${index}`);
+            
+            track.style.transform = `translateX(-${state.current * 100}%)`;
+            counter.textContent = `${state.current + 1} / ${properties[index].images.length}`;
+            
+            // Update dots
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === state.current);
+            });
+        }
+
+        function toggleDetails(index) {
+            const content = document.getElementById(`details-${index}`);
+            const toggle = content.previousElementSibling;
+            
+            content.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        function toggleMiscDetails(index) {
+            const content = document.getElementById(`misc-${index}`);
+            const toggle = content.previousElementSibling;
+            
+            content.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        function downloadCSV() {
+            const csvContent = `fullName,shortName,symbol,productType,tokenPrice,canal,currency,totalTokens,totalTokensRegSummed,uuid,ethereumContract,xDaiContract,gnosisContract,goerliContract,totalInvestment,grossRentYear,grossRentMonth,propertyManagement,propertyManagementPercent,realtPlatform,realtPlatformPercent,insurance,propertyTaxes,utilities,initialMaintenanceReserve,netRentDay,netRentMonth,netRentYear,netRentDayPerToken,netRentMonthPerToken,netRentYearPerToken,annualPercentageYield,coordinate_lat,coordinate_lng,marketplaceLink,imageLink,propertyType,propertyTypeName,squareFeet,lotSize,bedroomBath,hasTenants,rentedUnits,totalUnits,termOfLease,renewalDate,section8paid,subsidyStatus,subsidyStatusValue,subsidyBy,sellPropertyTo,secondaryMarketplace_UniswapV1,secondaryMarketplace_UniswapV2,secondaryMarketplaces,blockchainAddresses_ethereum_chainName,blockchainAddresses_ethereum_chainId,blockchainAddresses_ethereum_contract,blockchainAddresses_ethereum_distributor,blockchainAddresses_ethereum_maintenance,blockchainAddresses_xDai_chainName,blockchainAddresses_xDai_chainId,blockchainAddresses_xDai_contract,blockchainAddresses_xDai_distributor,blockchainAddresses_xDai_rmmPoolAddress,blockchainAddresses_xDai_rmmV3WrapperAddress,blockchainAddresses_xDai_chainlinkPriceContract,blockchainAddresses_sepolia_chainName,blockchainAddresses_sepolia_chainId,blockchainAddresses_sepolia_contract,blockchainAddresses_sepolia_distributor,blockchainAddresses_sepolia_rmmPoolAddress,blockchainAddresses_sepolia_chainlinkPriceContract,underlyingAssetPrice,renovationReserve,propertyMaintenanceMonthly,rentStartDate_date,rentStartDate_timezone_type,rentStartDate_timezone,lastUpdate_date,lastUpdate_timezone_type,lastUpdate_timezone,originSecondaryMarketplaces,initialLaunchDate_date,initialLaunchDate_timezone_type,initialLaunchDate_timezone,seriesNumber,constructionYear,constructionType,roofType,assetParking,foundation,heating,cooling,tokenIdRules,rentCalculationType,realtListingFeePercent,realtListingFee,miscellaneousCosts,propertyStories,rentalType,tokenPrices,renovationPoolMonthlyPercentFee,renovationPoolInitialFee,rentalHistory,neighborhood
+"23750 W 7 Mile Rd, Detroit, MI 48219",23750 W 7 Mile,REALTOKEN-S-23750-W-7-MILE-RD-DETROIT-MI,real_estate_rental,50.51,release,USD,18700,18700,0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf,0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf,0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf,0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf,,944537,159360,13280,1062.4,0.08,265.6,0.02,1360,775,1651.5,36560,235.57808219178,7165.5,85986,0.012597758405978,0.38318181818182,4.5981818181818,9.1035078562301,42.429298,-83.274959,https://realt.co/product/23750-w-7-mile-rd-detroit-mi-48219/,"[""https://realt.co/wp-content/uploads/2024/12/23750-W-7-Mile-front-side-1.jpg""]",2,Multi Family,11944,13068,17x1 Bed / 17x1 Bath,true,17,17,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x484e823FfAB71debb0a0d212e240E76737210998""}]",Ethereum,1,0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf,0x0ef5E541B513cF3920b296FF8D57503D6D2ef148,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0x0f388d7e65a969dbcbfab21bc3ab6629af78f4cf,0x0ef5E541B513cF3920b296FF8D57503D6D2ef148,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0x181f9509be059FCEC48f66A2EEC489ac0892F2b2,Sepolia testnet,11155111,0,0,0,0,780000,32000,1000,2025-02-15 00:00:00.000000,3,UTC,2026-01-27 16:34:10.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x484e823FfAB71debb0a0d212e240E76737210998""}]",2024-12-20 00:00:00.000000,3,UTC,686,1955,Brick,Asphalt,,Masonry,Gas / Forced Air,,100685,constant,0.1,94453.7,600,,long_term,,,,,Seven Mile - Rouge
+"18881 Mound Rd, Detroit, MI 48234",18881 Mound,REALTOKEN-S-18881-MOUND-RD-DETROIT-MI,real_estate_rental,50.2,release,USD,6700,6700,0x5c4e3fa9704d4212c6434190af6379cfbda47e13,0x5c4e3fa9704d4212c6434190af6379cfbda47e13,0x5c4e3fa9704d4212c6434190af6379cfbda47e13,0x5c4e3fa9704d4212c6434190af6379cfbda47e13,,336340,66600,5550,444,0.08,111,0.02,640,400,600,11100,84,2555,30660,0.012537313432836,0.38134328358209,4.5761194029851,9.1157757031575,42.432798,-83.044147,https://realt.co/product/18881-mound-rd-detroit-mi-48234/,"[""https://realt.co/wp-content/uploads/2024/12/18881-Mound-front-side-1.jpg""]",2,Multi Family,3732,,8x1 Bed / 8x1 Bath,true,8,8,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x15dAb55Ad786E16CeC3bD42388287A12227Cd9F8""}]",Ethereum,1,0x5c4e3fa9704d4212c6434190af6379cfbda47e13,0xa55DfE468d6BaFbee51e868366D878057E0E09B0,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0x5c4e3fa9704d4212c6434190af6379cfbda47e13,0xa55DfE468d6BaFbee51e868366D878057E0E09B0,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0x3Db83012dFfe877cDC9a98cBf7165a2c2b2cC365,Sepolia testnet,11155111,0,0,0,0,270000,20000,800,2025-03-15 00:00:00.000000,3,UTC,2026-01-27 16:34:10.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x15dAb55Ad786E16CeC3bD42388287A12227Cd9F8""}]",2024-12-13 00:00:00.000000,3,UTC,688,1959,Brick,Asphalt,,Masonry,Gas / Forced Air,,100684,constant,0.1,33634,600,,long_term,,,,,Krainz Woods
+"14631-14633 Plymouth Rd, Detroit, MI 48227",14631-14633 Plymouth,REALTOKEN-S-14631-14633-PLYMOUTH-RD-DETROIT-MI,real_estate_rental,50.51,release,USD,27500,27500,0x854a0cfa24012937d3d15682ecc3d5b474bfa97e,0x854a0cfa24012937d3d15682ecc3d5b474bfa97e,0x854a0cfa24012937d3d15682ecc3d5b474bfa97e,0x854a0cfa24012937d3d15682ecc3d5b474bfa97e,,1389025,249600,20800,1664,0.08,416,0.02,1900,1300,2800,41600,347.50684931507,10570,126840,0.012636612702366,0.38436363636364,4.6123636363636,9.1315851046597,42.372607,-83.188424,https://realt.co/product/14631-14633-plymouth-rd-detroit-mi-48227/,"[""https://realt.co/wp-content/uploads/2024/12/14631-14633-Plymouth-front-flat-1.jpg""]",2,Multi Family,15292,,27x1 Bed / 27x1 Bath,true,27,27,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x1038e0C43D15bD59ed0adA5e3D4EA4e2F9f1Db09""}]",Ethereum,1,0x854a0cfa24012937d3d15682ecc3d5b474bfa97e,0xfC5dc2de209eb1895b7b0e38b0ccB7E0A7F40FA1,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0x854a0cfa24012937d3d15682ecc3d5b474bfa97e,0xfC5dc2de209eb1895b7b0e38b0ccB7E0A7F40FA1,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0x7dc63C0F5B58aa060CF38836f1FC26e5120FFDf4,Sepolia testnet,11155111,0,0,0,0,1150000,57000,2150,2025-03-15 00:00:00.000000,3,UTC,2026-01-27 16:34:10.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x1038e0C43D15bD59ed0adA5e3D4EA4e2F9f1Db09""}]",2024-12-13 00:00:00.000000,3,UTC,687,1952,Brick,Asphalt,,Masonry,Gas / Forced Air,,100683,constant,0.1,138902.5,600,,long_term,,,,,Plymouth - Hubbell
+"11373 Prest St, Detroit, MI 48227",11373 Prest,REALTOKEN-S-11373-PREST-ST-DETROIT-MI,real_estate_rental,50.2,release,USD,1530,1530,0xd8b19f31186fc7350be018651aa1383175923bb3,0xd8b19f31186fc7350be018651aa1383175923bb3,0xd8b19f31186fc7350be018651aa1383175923bb3,0xd8b19f31186fc7350be018651aa1383175923bb3,,76806,12120,1010,80.8,0.08,20.2,0.02,90,120,0,2020,19.035616438356,579,6948,0.012441579371475,0.37843137254902,4.5411764705882,9.0461682681041,42.371296,-83.196702,https://realt.co/product/11373-prest-st-detroit-mi-48227/,"[""https://realt.co/wp-content/uploads/2024/12/11373-Prest-front-side-3.jpg""]",1,Single Family,864,3702,3 Beds / 1 Bath,true,1,1,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x7f7735bf5f11F0d09ccb69201b1A2f8C4671a1fA""}]",Ethereum,1,0xd8b19f31186fc7350be018651aa1383175923bb3,0xb8Eac9EDfd9686F2D70a4087735aF5B6C7AC0Ede,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0xd8b19f31186fc7350be018651aa1383175923bb3,0xb8Eac9EDfd9686F2D70a4087735aF5B6C7AC0Ede,0,0x10497611Ee6524D75FC45E3739F472F83e282AD5,0x58121CFB6eB61843Ac38Ff7DF0A259d89CB82f33,Sepolia testnet,11155111,0,0,0,0,63000,3000,120,2025-03-01 00:00:00.000000,3,UTC,2026-01-27 16:34:10.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x7f7735bf5f11F0d09ccb69201b1A2f8C4671a1fA""}]",2024-12-06 00:00:00.000000,3,UTC,684,1949,Brick,Asphalt,,Masonry,Gas / Forced Air,,100682,constant,0.1,7680.6,500,,long_term,,,,,Plymuth - Hubbell
+"16728-16730 Woodingham Dr, Detroit, MI 48221",16728-16730 Woodingham,REALTOKEN-S-16728-16730-WOODINGHAM-DR-DETROIT-MI,real_estate_rental,50.49,release,USD,2850,2850,0xc7697f5e86a102eaf4000719a2dc477d65beea7d,0xc7697f5e86a102eaf4000719a2dc477d65beea7d,0xc7697f5e86a102eaf4000719a2dc477d65beea7d,0xc7697f5e86a102eaf4000719a2dc477d65beea7d,,143896.5,22200,1850,148,0.08,37,0.02,130,150,0,3700,39.616438356164,1205,14460,0.013900504686373,0.42280701754386,5.0736842105263,10.048889305855,42.415419,-83.149859,https://realt.co/product/16728-16730-woodingham-dr-detroit-mi-48221/,"[""https://realt.co/wp-content/uploads/2023/12/16728-16730-Woodingham-front-hero-fix.jpg""]",3,Duplex,1868,3398,2x2 Beds / 2x1 Bath,true,2,2,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x42d7b83f9a1b818228e694c48a57470456d94759""}]",Ethereum,1,0xc7697f5e86a102eaf4000719a2dc477d65beea7d,0x078a64aC4717975983F21C696765bb335EAB46E7,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0xc7697f5e86a102eaf4000719a2dc477d65beea7d,0x078a64aC4717975983F21C696765bb335EAB46E7,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0xCc49b180782123126F52553259E5cA8d601c7422,Sepolia testnet,11155111,0,0,0,0,98000,25000,180,2024-02-01 00:00:00.000000,3,UTC,2026-01-27 16:34:00.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x42d7b83f9a1b818228e694c48a57470456d94759""}]",2023-12-09 00:00:00.000000,3,UTC,432,1928,Brick,Asphalt,,Masonry,Forced Air w/o Ducts,,100450,constant,0.1,14388.89,300,,long_term,,,,,Maygrove
+"9518 Franklin Dr, Mont Belvieu, TX 77523",9518 Franklin,REALTOKEN-S-9518-FRANKLIN-DR-MONT-BELVIEU-TX,real_estate_rental,50.73,release,USD,9100,9100,0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b,0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b,0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b,0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b,,461643,47760,3980,318.4,0.08,79.6,0.02,110,721,0,7960,86.498630136986,2631,31572,0.0095053439710974,0.28912087912088,3.4694505494505,6.8390509549587,29.832396,-94.853589,https://realt.co/product/9518-franklin-dr-mont-belvieu-tx-77523/,"[""https://realt.co/wp-content/uploads/2024/10/9518-franklin-front-side-1.jpg""]",1,Single Family,3358,11761,4 Beds / 3.5 Baths,true,1,1,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0xeE365Cc33a9EBd6cD7DA947133E4102830BBe29d""}]",Ethereum,1,0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b,0x3AC5196EdcFb9b4ACa27Ac70680F8039E25dbf72,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0x4ae9d3343bbc6a894b7ee7f843c224c953f1661b,0x3AC5196EdcFb9b4ACa27Ac70680F8039E25dbf72,0,0x10497611Ee6524D75FC45E3739F472F83e282AD5,0xACb83C3B7b8c4Be550c865786886Fa00c1C02F1e,Sepolia testnet,11155111,0,0,0,0,401000,5000,120,2025-01-15 00:00:00.000000,3,UTC,2026-01-27 16:34:07.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0xeE365Cc33a9EBd6cD7DA947133E4102830BBe29d""}]",2024-10-18 00:00:00.000000,3,UTC,629,2017,"Brick, Vinyl Siding",Composition,,Slab,"Central Air, Electric, Gas",Central,100632,constant,0.1,46164.3,500,,long_term,,,,,Mont Belvieu
+"8034 Faith Ln, Montgomery, AL 36117",8034 Faith,REALTOKEN-S-8034-FAITH-LN-MONTGOMERY-AL,real_estate_rental,51.14,release,USD,6400,6400,0x90d280b6456f8233e115e6aabb2ca89249dafd39,0x90d280b6456f8233e115e6aabb2ca89249dafd39,0x90d280b6456f8233e115e6aabb2ca89249dafd39,0x90d280b6456f8233e115e6aabb2ca89249dafd39,,327296,30600,2550,204,0.08,51,0.02,67,120,0,5100,65.358904109589,1988,23856,0.010212328767123,0.310625,3.7275,7.2888150175987,32.352942,-86.135603,https://realt.co/product/8034-faith-ln-montgomery-al-36117/,"[""https://realt.co/wp-content/uploads/2023/08/8034-Faith-Lane-front-hero.jpg""]",1,Single Family,1923,7175,3 Beds / 2 Baths,true,1,1,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0xb7b47441443663278a1d698150a5d484a36ab7bf""}]",Ethereum,1,0x90d280b6456f8233e115e6aabb2ca89249dafd39,0x560158e1f02abF12b203616bE80663844174BD27,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0x90d280b6456f8233e115e6aabb2ca89249dafd39,0x560158e1f02abF12b203616bE80663844174BD27,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0x336ACb0c00cED56980C4Cd471c8Cd23CC9bDc806,Sepolia testnet,11155111,0,0,0,0,287500,3000,120,2023-10-01 00:00:00.000000,3,UTC,2026-01-27 16:33:57.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0xb7b47441443663278a1d698150a5d484a36ab7bf""}]",2023-08-25 00:00:00.000000,3,UTC,364,2017,Brick / Vinyl Siding,Composition Shingles,,Slab,Heat Pump / Gas,Heat Pump,100392,constant,0.08,26182.61,4000,,long_term,,,,,Ryan Ridge
+"1769 Cheryl Ave, Griffin, GA 30224",1769 Cheryl,REALTOKEN-S-1769-CHERYL-AVE-GRIFFIN-GA,real_estate_rental,49.56,release,USD,6200,6200,0x19f824662ba9df78e368022f085b708fccc201c8,0x19f824662ba9df78e368022f085b708fccc201c8,0x19f824662ba9df78e368022f085b708fccc201c8,0x19f824662ba9df78e368022f085b708fccc201c8,,307272,31200,2600,208,0.08,52,0.02,60,321,0,5200,60.460273972603,1839,22068,0.0097516570923553,0.29661290322581,3.5593548387097,7.181910489729,33.224176,-84.310708,https://realt.co/product/1769-cheryl-ave-griffin-ga-30224/,"[""https://realt.co/wp-content/uploads/2023/09/1769-Cheryl-Ave-front-hero.jpg""]",1,Single Family,1680,11761,3 Beds / 3 Baths,true,1,1,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x6aabe06a8ef91553c6fc8db8beb3459c0af7843f""}]",Ethereum,1,0x19f824662ba9df78e368022f085b708fccc201c8,0x9B1Efb16Fc175490e9966fe91443368e7Fbafc4d,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0x19f824662ba9df78e368022f085b708fccc201c8,0x9B1Efb16Fc175490e9966fe91443368e7Fbafc4d,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0xd50539035038dEd1681e35712fcC6ABb4529A682,Sepolia testnet,11155111,0,0,0,0,250000,3000,120,2023-12-01 00:00:00.000000,3,UTC,2026-01-27 16:33:58.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x6aabe06a8ef91553c6fc8db8beb3459c0af7843f""}]",2023-09-21 00:00:00.000000,3,UTC,387,2021,Concrete,Composition Shingles,,Poured Concrete,Central Air,Central Air,100406,constant,0.08,24582.61,23000,,long_term,,,,,Powers Court
+"9311 Bedford St, Detroit, MI 48224",9311 Bedford,REALTOKEN-S-9311-BEDFORD-ST-DETROIT-MI,real_estate_rental,50.15,release,USD,1800,1800,0xa83cbd26964ea953f86c741871a1ab2a256cb82d,0xa83cbd26964ea953f86c741871a1ab2a256cb82d,0xa83cbd26964ea953f86c741871a1ab2a256cb82d,0xa83cbd26964ea953f86c741871a1ab2a256cb82d,,90270,14400,1200,96,0.08,24,0.02,85,190,0,2400,22.520547945205,685,8220,0.012511415525114,0.38055555555556,4.5666666666667,9.1060152874709,42.411886,-82.948675,https://realt.co/product/9311-bedford-st-detroit-mi-48224/,"[""https://realt.co/wp-content/uploads/2024/06/9311-Bedford-front-flat-1.jpg""]",1,Single Family,1170,3920,3 Beds / 1 Bath,true,1,1,,,0,no,,,intl_investors_only,0,0,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x059E2aFFC065Df064FeBAafe917456be1ef224Ae""}]",Ethereum,1,0xa83cbd26964ea953f86c741871a1ab2a256cb82d,0xf74A0A6b0A8e3d69453F05c258afB46429dBD0a2,0x2944c261Fe6bFbED7e432fcf66a860af7aF7033a,xDaiChain,100,0xa83cbd26964ea953f86c741871a1ab2a256cb82d,0xf74A0A6b0A8e3d69453F05c258afB46429dBD0a2,0,0x10497611ee6524d75fc45e3739f472f83e282ad5,0xe39A0b4Ec96aDA33fEbc231dFa1fE6b9E4DB4134,Sepolia testnet,11155111,0,0,0,0,66000,10000,120,2024-08-15 00:00:00.000000,3,UTC,2026-01-27 16:34:05.000000,3,UTC,"[{""chainId"":100,""chainName"":""xDaiChain"",""dexName"":""LevinSwap"",""contractPool"":""0x059E2aFFC065Df064FeBAafe917456be1ef224Ae""}]",2024-06-14 00:00:00.000000,3,UTC,565,1936,Brick,Asphalt,,Block,Gas / Forced Air not Ducted,,100577,constant,0.1,9027,350,,long_term,,,,,Yorkshire Woods`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'realtoken_properties_data.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
